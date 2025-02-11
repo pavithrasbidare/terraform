@@ -31,7 +31,7 @@ resource "aws_route_table_association" "main" {
 }
 
 resource "aws_instance" "web" {
-  ami           = "ami-0454e52560c7f5c55"
+  ami           = "ami-0d8f6eb4f641ef691"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.main.id
 
