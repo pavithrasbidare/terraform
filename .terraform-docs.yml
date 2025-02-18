@@ -1,1 +1,34 @@
+version: "0.12"
+output:
+  file: README.md
+  mode: inject
+  template: |
+    ## Providers
 
+    {{- if .Providers }}
+    {{- range .Providers }}
+    - **{{ .Name }}** ({{ .Source }}): {{ .Version }}
+    {{- end }}
+    {{- else }}
+    _None_
+    {{- end }}
+
+    ## Inputs
+
+    {{- if .Inputs }}
+    {{- range .Inputs }}
+    - **{{ .Name }}**: {{ .Description }} (Type: `{{ .Type }}`, Default: `{{ .Default }}`)
+    {{- end }}
+    {{- else }}
+    _None_
+    {{- end }}
+
+    ## Outputs
+
+    {{- if .Outputs }}
+    {{- range .Outputs }}
+    - **{{ .Name }}**: {{ .Description }}
+    {{- end }}
+    {{- else }}
+    _None_
+    {{- end }}
