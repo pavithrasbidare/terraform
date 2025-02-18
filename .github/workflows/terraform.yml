@@ -9,9 +9,9 @@ on:
         default: "dev"
         type: choice
         options:
-        - dev
-        - staging
-        - prod
+          - dev
+          - staging
+          - prod
 
   push:
     branches:
@@ -38,6 +38,7 @@ jobs:
         with:
           terraform_version: 1.5.5
 
+      # Step: Install TFLint
       - name: Install TFLint
         run: |
           TFLINT_VERSION="v0.55.0"
@@ -59,22 +60,22 @@ jobs:
       # Step: Run TFLint
       - name: Run TFLint
         run: |
-         cd Infra/Environments/${{ github.event.inputs.environment || 'dev' }}
+          cd ./${{ github.event.inputs.environment || 'dev' }}
 
-         # Ensure .tflint.hcl exists
-         if [ ! -f ".tflint.hcl" ]; then
+          # Ensure .tflint.hcl exists
+          if [ ! -f ".tflint.hcl" ]; then
             cat <<EOF > .tflint.hcl
             plugin "terraform" {
-            enabled = true
-           }
-         EOF
-         fi
+              enabled = true
+            }
+            EOF
+          fi
 
-         # Install TFLint plugin (Terraform)
-         tflint --init
+          # Install TFLint plugin (Terraform)
+          tflint --init
 
-         # Run TFLint with proper syntax
-         tflint --config .tflint.hcl
+          # Run TFLint with proper syntax
+          tflint --config .tflint.hcl
 
       # Step: Install Checkov
       - name: Install Checkov
@@ -85,40 +86,31 @@ jobs:
       # Step: Run Checkov Security Scan
       - name: Run Checkov
         run: |
-          cd Infra/Environments/${{ github.event.inputs.environment || 'dev' }}
+          cd ./${{ github.event.inputs.environment || 'dev' }}
           checkov --directory . --skip-check CKV_AWS_*,CKV2_AWS_*
-
-      # Step: Configure AWS Credentials using OIDC
-      - name: Configure AWS Credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::302263075199:role/OIDC-Terraform  # Your specific IAM role ARN
-          aws-region: us-west-2  # AWS region you are working with
-          web-identity-token-file: ${{ github.token }}  # GitHub OIDC token for authentication
-          role-session-name: github-actions-session
 
       # Step: Terraform Init
       - name: Terraform Init
         run: | 
-          cd Infra/Environments/${{ github.event.inputs.environment || 'dev' }}
+          cd ./${{ github.event.inputs.environment || 'dev' }}
           terraform init
 
-      # Step: Run Terraform Validate (validate configuration files)
+      # Step: Terraform Validate
       - name: Terraform Validate
         run: |
-          cd Infra/Environments/${{ github.event.inputs.environment || 'dev' }}
+          cd ./${{ github.event.inputs.environment || 'dev' }}
           terraform validate
 
       # Step: Terraform Workspace Select
       - name: Terraform Workspace Select
         run: |
-          cd Infra/Environments/${{ github.event.inputs.environment || 'dev' }}
+          cd ./${{ github.event.inputs.environment || 'dev' }}
           terraform workspace select ${{ github.event.inputs.environment || 'dev' }} || terraform workspace new ${{ github.event.inputs.environment || 'dev' }}
 
       # Step: Terraform Plan
       - name: Terraform Plan
         run: |
-          cd Infra/Environments/${{ github.event.inputs.environment || 'dev' }} 
+          cd ./${{ github.event.inputs.environment || 'dev' }} 
           terraform plan -var-file="${{ github.event.inputs.environment || 'dev' }}-var.tfvars" -out=tfplan
 
       # Step: Checkout Repository for PR
@@ -127,7 +119,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref || github.ref }} 
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
 
       # Step: Configure Git for committing generated README.md
       - name: Configure Git
@@ -140,25 +132,25 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: terraform-docs/gh-actions@v1.3.0
         with:
-          working-dir: Infra/Environments/${{ github.event.inputs.environment || 'dev' }}
+          working-dir: ./${{ github.event.inputs.environment || 'dev' }}
           output-file: README.md
           output-method: inject
           git-push: true
           config-file: .terraform-docs.yml
 
-      # **New Step: Add README.md to PR Comment using Sticky Comment**
+      # Step: Post README.md as PR Comment
       - name: Post README.md as PR Comment
         if: ${{ github.event_name == 'pull_request' }}
         uses: marocchino/sticky-pull-request-comment@v2.9.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           header: "Terraform Documentation 📖"
-          path: "Infra/Environments/${{ github.event.inputs.environment || 'dev' }}/README.md"
+          path: "./${{ github.event.inputs.environment || 'dev' }}/README.md"
 
-      # Step: Apply Terraform if PR is merged
+      # Step: Apply Terraform on Merge the PR
       - name: Apply Terraform on Merge the PR
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         run: |
-          cd Infra/Environments/${{ github.event.inputs.environment || 'dev' }}
+          cd ./${{ github.event.inputs.environment || 'dev' }}
           terraform init
           terraform apply -auto-approve -var-file="${{ github.event.inputs.environment || 'dev' }}-var.tfvars"
