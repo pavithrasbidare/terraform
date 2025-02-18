@@ -1,0 +1,49 @@
+name: Destroy Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to destroy'
+        required: true
+        default: 'main'
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 2: Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::302263075199:role/OIDC-Terraform
+          aws-region: us-west-2
+
+      # Step 3: Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
+
+      # Step 4: Terraform Init
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./Usecase_1
+
+      # Step 5: Terraform Destroy
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
+        working-directory: ./Usecase_1
