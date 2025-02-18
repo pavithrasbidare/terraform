@@ -21,7 +21,7 @@ jobs:
     permissions:
       id-token: write
       contents: Write
-      pull-requests: 
+      pull-requests: Write
 
     steps:
       # Step 1: Checkout Code for Deployment
