@@ -332,7 +332,7 @@ variable "db_instance_class" {
 }
 
 variable "db_engine" {
-  description = "Database engine version"
+  description = "Database engine version-test"
   default     = "mysql"
 }
 
