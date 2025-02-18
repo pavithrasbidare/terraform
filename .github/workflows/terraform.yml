@@ -36,7 +36,8 @@ jobs:
           role-to-assume: arn:aws:iam::302263075199:role/OIDC-Terraform
           aws-region: us-west-2
 
-      # ✅ Step 3: Setup Terraform.
+      # ✅ Step 3: Setup Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.0.0
@@ -61,7 +62,7 @@ jobs:
           git-push: true
           config-file: .terraform-docs.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ✅ Step 6: Configure Git to Commit Generated Docs
       - name: Configure Git
