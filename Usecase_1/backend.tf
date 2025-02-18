@@ -1,4 +1,4 @@
-# Configure Terraform Backend
+# Configure Terraform Backend.
 terraform {
   backend "s3" {
     bucket         = "nsh-usecase1"

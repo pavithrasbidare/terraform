@@ -9,7 +9,8 @@ on:
         default: 'main'
   pull_request:
     branches:
-      - main 
+      - main
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
