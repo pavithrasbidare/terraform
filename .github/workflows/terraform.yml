@@ -57,7 +57,7 @@ jobs:
 
       # ✅ Step 5: Generate Terraform Docs Markdown
       - name: Generate Markdown with Terraform Docs
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         uses: terraform-docs/gh-actions@v1.3.0
         with:
           working-dir: ./Usecase_1
