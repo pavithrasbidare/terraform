@@ -62,7 +62,7 @@ jobs:
           git-push: true
           config-file: .terraform-docs.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ✅ Step 6: Configure Git to Commit Generated Docs
       - name: Configure Git
