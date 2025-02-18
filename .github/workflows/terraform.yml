@@ -90,14 +90,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 10: Commit and Push Generated Docs
-      - name: Commit and Push Generated Docs
-        run: |
-          git add ./Usecase_1/README.md
-          git commit -m "Update Terraform docs"
-          git push origin ${{ github.event.pull_request.head.ref || github.ref }}
-
-      # Step 11: Configure Git to Commit Generated Docs
+          # Step 11: Configure Git to Commit Generated Docs
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
