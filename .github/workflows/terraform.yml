@@ -6,7 +6,11 @@ on:
       branch:
         description: 'Branch to deploy'
         required: true
-        default: 'main'
+        default: 'main
+  pull_request:
+    branches:
+      - main
+
 
 jobs:
   terraform:
