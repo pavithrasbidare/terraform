@@ -90,13 +90,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 10: Configure Git to Commit Generated Docs
+      # Step 10: Commit and Push Generated Docs
+      - name: Commit and Push Generated Docs
+        run: |
+          git add ./Usecase_1/README.md
+          git commit -m "Update Terraform docs"
+          git push origin ${{ github.event.pull_request.head.ref || github.ref }}
+
+      # Step 11: Configure Git to Commit Generated Docs
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      # Step 11: Add README.md as PR Comment (Using Sticky Comment)
+      # Step 12: Add README.md as PR Comment (Using Sticky Comment)
       - name: Post README.md as PR Comment
         if: github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2.9.0
@@ -105,7 +112,7 @@ jobs:
           header: "Terraform Documentation 📖"
           path: "./Usecase_1/README.md"
 
-      # Step 12: Apply Terraform Changes on PR Merge
+      # Step 13: Apply Terraform Changes on PR Merge
       - name: Apply Terraform on Merge
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
