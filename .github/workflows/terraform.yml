@@ -36,8 +36,7 @@ jobs:
           role-to-assume: arn:aws:iam::302263075199:role/OIDC-Terraform
           aws-region: us-west-2
 
-      # ✅ Step 3: Setup Terraform
-      - name: Setup Terraform
+      # ✅ Step 3: Setup Terraform.
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.0.0
