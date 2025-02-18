@@ -78,7 +78,7 @@ jobs:
           header: "Terraform Documentation 📖"
           path: "./Usecase_1/README.md"
 
-      # ✅ Step 8: Apply Terraform Changes on PR Merge
+      #  Step 8: Apply Terraform Changes on PR Merge
       - name: Apply Terraform on Merge
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
