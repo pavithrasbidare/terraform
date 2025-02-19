@@ -71,18 +71,18 @@ jobs:
       # Step 8: Terraform Init & Plan
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Usecase_1
+        working-directory: ./Usecase_1/Infra
 
       - name: Terraform Plan
-        run: terraform plan
-        working-directory: ./Usecase_1
+        run: terraform plan -var-file=../Env/dev/terraform.tfvars
+        working-directory: ./Usecase_1/Infra
 
       # Step 9: Generate Terraform Docs Markdown
       - name: Generate Markdown with Terraform Docs
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         uses: terraform-docs/gh-actions@v1.3.0
         with:
-          working-dir: ./Usecase_1
+          working-dir: ./Usecase_1/Infra
           output-file: README.md
           output-method: inject
           git-push: true
@@ -90,25 +90,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          # Step 11: Configure Git to Commit Generated Docs
+      # Step 10: Configure Git to Commit Generated Docs
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      # Step 12: Add README.md as PR Comment (Using Sticky Comment)
+      # Step 11: Add README.md as PR Comment (Using Sticky Comment)
       - name: Post README.md as PR Comment
         if: github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2.9.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           header: "Terraform Documentation 📖"
-          path: "./Usecase_1/README.md"
+          path: "./Usecase_1/Infra/README.md"
 
-      # Step 13: Apply Terraform Changes on PR Merge
+      # Step 12: Apply Terraform Changes on PR Merge
       - name: Apply Terraform on Merge
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          cd ./Usecase_1
+          cd ./Usecase_1/Infra
           terraform init
-          terraform apply -auto-approve
+          terraform apply -var-file=../Env/dev/terraform.tfvars -auto-approve
