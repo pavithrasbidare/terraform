@@ -49,7 +49,7 @@ No modules.
 | <a name="input_db_instance_class"></a> [db\_instance\_class](#input\_db\_instance\_class) | RDS instance class | `string` | `"db.t3.micro"` | no |
 | <a name="input_db_password"></a> [db\_password](#input\_db\_password) | Database password | `string` | `"password123"` | no |
 | <a name="input_db_username"></a> [db\_username](#input\_db\_username) | Database username | `string` | `"admin"` | no |
-| <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | EC2 instance type | `string` | `"t3.micro"` | no |
+| <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | EC2 instance type | `string` | `"t2.micro"` | no |
 | <a name="input_private_subnet1_cidr"></a> [private\_subnet1\_cidr](#input\_private\_subnet1\_cidr) | CIDR block for the first private subnet | `string` | `"10.0.3.0/24"` | no |
 | <a name="input_private_subnet2_cidr"></a> [private\_subnet2\_cidr](#input\_private\_subnet2\_cidr) | CIDR block for the second private subnet | `string` | `"10.0.4.0/24"` | no |
 | <a name="input_public_subnet1_cidr"></a> [public\_subnet1\_cidr](#input\_public\_subnet1\_cidr) | CIDR block for the first public subnet | `string` | `"10.0.1.0/24"` | no |
