@@ -10,3 +10,4 @@ db_engine = "mysql"
 db_allocated_storage = 20
 db_username = "admin"
 db_password = "password123"
+
