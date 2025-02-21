@@ -74,7 +74,7 @@ jobs:
         working-directory: ./Usecase_1/Infra
 
       - name: Terraform Plan
-        run: terraform plan -var-file=../Env/dev/terraform.tfvars
+        run: terraform plan -var-file=../Env/terraform.tfvars
         working-directory: ./Usecase_1/Infra
 
       # Step 9: Generate Terraform Docs Markdown
@@ -111,4 +111,4 @@ jobs:
         run: |
           cd ./Usecase_1/Infra
           terraform init
-          terraform apply -var-file=../Env/dev/terraform.tfvars -auto-approve
+          terraform apply -var-file=../Env/terraform.tfvars -auto-approve
