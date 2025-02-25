@@ -41,9 +41,9 @@ jobs:
       # Step 4: Terraform Init
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Usecase_1
+        working-directory: ./Usecase_1/Infra
 
       # Step 5: Terraform Destroy
       - name: Terraform Destroy
-        run: terraform destroy -auto-approve
-        working-directory: ./Usecase_1
+        run: terraform destroy -var-file=../Env/terraform.tfvars -auto-approve
+        working-directory: ./Usecase_1/Infra
